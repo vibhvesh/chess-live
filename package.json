@@ -1,0 +1,29 @@
+{
+  "name": "chess-live",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Free, serverless two-player and vs-computer chess. WebRTC via PeerJS, Stockfish in the browser, hosted on GitHub Pages.",
+  "scripts": {
+    "dev": "vite --config vite.config.js",
+    "build": "vite build --config vite.config.js",
+    "preview": "vite preview --config vite.config.js --host 0.0.0.0 --port 4173",
+    "test": "node scripts/test-sync.mjs",
+    "postinstall": "node scripts/copy-stockfish.mjs"
+  },
+  "dependencies": {
+    "chess.js": "^1.4.0",
+    "lz-string": "^1.5.0",
+    "nanoid": "^5.1.5",
+    "peerjs": "^1.5.5",
+    "react": "^19.2.0",
+    "react-chessboard": "^4.7.3",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.0",
+    "stockfish": "^16.0.0",
+    "vite": "^7.1.12"
+  }
+}

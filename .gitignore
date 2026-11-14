@@ -1,0 +1,10 @@
+node_modules/
+dist/
+data/
+*.log
+.env
+.DS_Store
+client/public/engine/*.js
+client/public/engine/*.wasm
+client/public/engine/*.data
+!client/public/engine/.gitkeep
