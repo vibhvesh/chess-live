@@ -9,7 +9,8 @@
     "build": "vite build --config vite.config.js",
     "preview": "vite preview --config vite.config.js --host 0.0.0.0 --port 4173",
     "test": "node scripts/test-sync.mjs",
-    "postinstall": "node scripts/copy-stockfish.mjs"
+    "postinstall": "node scripts/copy-stockfish.mjs",
+    "test:e2e": "python3 scripts/test-engine-e2e.py"
   },
   "dependencies": {
     "chess.js": "^1.4.0",

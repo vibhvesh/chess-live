@@ -17,6 +17,7 @@ import {
 } from "../client/src/game/logic.js";
 import { hostApply, hostWelcome, mergeResync, TYPES, publicState } from "../client/src/net/protocol.js";
 import { encodeReviewPayload, decodeReviewPayload } from "../client/src/review/compressPgn.js";
+import { resolveAssetUrl } from "../client/src/engine/assetUrl.js";
 
 const results = [];
 function test(name, fn) {
@@ -244,6 +245,59 @@ try {
   results.push({ name: "stalemate is a draw (real)", ok: false, error: err });
   console.error("  FAIL stalemate:", err.message);
 }
+
+
+test("engine asset URLs are absolute under a GitHub Pages subpath", () => {
+  assert.throws(() => new URL("engine/stockfish.js", "/chess-live/"), /Invalid URL|Invalid base URL/i);
+
+  const pages = resolveAssetUrl("engine/stockfish.js", {
+    origin: "https://vibhvesh.github.io",
+    basePath: "/chess-live/",
+  });
+  assert.equal(pages, "https://vibhvesh.github.io/chess-live/engine/stockfish.js");
+
+  // Hash routes and a missing trailing slash must not drop the repo subpath.
+  const hashed = resolveAssetUrl("engine/stockfish.wasm", {
+    origin: "https://vibhvesh.github.io",
+    basePath: "/chess-live",
+    baseURI: "https://vibhvesh.github.io/chess-live#/c/abc",
+  });
+  assert.equal(hashed, "https://vibhvesh.github.io/chess-live/engine/stockfish.wasm");
+
+  const local = resolveAssetUrl("engine/stockfish.js", {
+    origin: "http://127.0.0.1:4173",
+    basePath: "/",
+  });
+  assert.equal(local, "http://127.0.0.1:4173/engine/stockfish.js");
+
+  const fromDocOnly = resolveAssetUrl("engine/stockfish.js", {
+    basePath: "/chess-live/",
+    baseURI: "https://vibhvesh.github.io/chess-live/#/c/xyz",
+  });
+  assert.equal(fromDocOnly, "https://vibhvesh.github.io/chess-live/engine/stockfish.js");
+});
+
+
+
+test("resigned game builds valid PGN and round-trips through a review URL", () => {
+  let g = createGame({ id: "rev-resign", mode: "computer", computer: { level: 1, humanColor: "w" } });
+  g = play(g, "e2", "e4", "w");
+  g = play(g, "e7", "e5", "b");
+  g = resign(g, "w").game;
+  const pgn = buildPgn(g);
+  assert.match(pgn, /0-1/);
+  assert.doesNotMatch(pgn, /\* 0-1/);
+  const again = gameFromPgn(pgn, { endReason: "resign", mode: "computer", computer: g.computer });
+  assert.equal(again.moves.length, 2);
+  assert.equal(again.winner, "b");
+  const payload = encodeReviewPayload(g);
+  const decoded = decodeReviewPayload(payload);
+  assert.ok(decoded);
+  assert.equal(decoded.moves.length, 2);
+  assert.equal(decoded.moves[0].san, "e4");
+  assert.equal(decoded.endReason, "resign");
+});
+
 
 const realFailed = results.filter((r) => !r.ok && r.name !== "stalemate is a draw");
 console.log(`\n${results.filter((r) => r.ok).length} passed, ${realFailed.length} failed`);

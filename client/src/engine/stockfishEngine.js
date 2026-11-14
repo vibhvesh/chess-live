@@ -3,6 +3,7 @@
  * Difficulty 1–8 maps to Skill Level + search depth / movetime.
  */
 
+import { engineWorkerUrl } from "./assetUrl.js";
 export const LEVELS = {
   1: { skill: 0, depth: 1, movetime: 80, elo: 800, label: "Beginner" },
   2: { skill: 3, depth: 2, movetime: 120, elo: 1000, label: "Easy" },
@@ -14,10 +15,6 @@ export const LEVELS = {
   8: { skill: 20, depth: 15, movetime: 2000, elo: 2200, label: "Master" },
 };
 
-function engineUrl() {
-  const base = import.meta.env.BASE_URL || "/";
-  return new URL("engine/stockfish.js", base.endsWith("/") ? base : base + "/").toString();
-}
 
 export function createStockfishEngine() {
   let worker = null;
@@ -60,7 +57,7 @@ export function createStockfishEngine() {
   return {
     async init() {
       if (worker) return;
-      worker = new Worker(engineUrl());
+      worker = new Worker(engineWorkerUrl());
       worker.onmessage = onMessage;
       send("uci");
       await waitFor((l) => l.includes("uciok"));

@@ -252,9 +252,11 @@ export function buildPgn(game) {
   ];
   if (game.endReason) headers.push(`[Termination "${game.endReason}"]`);
   const body = chess.pgn({ maxWidth: 80, newline: "\n" }) || "";
-  const withoutHeaders = body.replace(/\[.*\]\n?/g, "").trim();
-  const needsResult = !withoutHeaders.endsWith(result);
-  return `${headers.join("\n")}\n\n${withoutHeaders || "*"}${needsResult ? " " + result : ""}\n`;
+  let movetext = body.replace(/\[.*\]\n?/g, "").trim();
+  // chess.js leaves "*" when the game ended by resign/agreement; don't also append the result.
+  movetext = movetext.replace(/\s*(\*|1-0|0-1|1\/2-1\/2)\s*$/g, "").trim();
+  const line = movetext ? `${movetext} ${result}` : result;
+  return `${headers.join("\n")}\n\n${line}\n`;
 }
 
 export function gameFromPgn(pgn, extra = {}) {
