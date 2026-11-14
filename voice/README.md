@@ -1,13 +1,7 @@
 # Voice module
 
-Two implementations share the same idea (push-to-talk, show who is talking):
+1. **In-game WebRTC** (`client/src/voice/webrtcPtt.js`) — PeerJS push-to-talk between the two chess players.
 
-1. **Default — WebRTC via PeerJS** (`client/src/voice/webrtcPtt.js`)
-   Signalling rides the same PeerJS connection used for moves. Hold the mic
-   button or Space to talk. Works on the free public PeerJS broker; no server
-   of ours is required (GitHub Pages is static).
-
-2. **Sanket PTT adapter stub** (`voice/pttAdapter.js`)
-   Set `VITE_PTT_URL` (default `https://ptt.bowlinger.net`) and implement
-   `connectPtt()` when you want games to use the Sanket PTT backend instead
-   of the in-page WebRTC path.
+2. **Sanket PTT** (`voice/pttAdapter.js` + `client/src/voice/ptt.js`) — official SuperPTT client over public MQTT/WSS.
+   Default channel: `chess`. Audio is raw 12 kHz mono Int16 LE PCM in `[len][id][PCM]` frames (~1024 samples).
+   SuperPTT is loaded from https://vibhvesh.github.io/sanketptt/superptt/superptt.js (vendored fallback in `client/public/vendor/`).

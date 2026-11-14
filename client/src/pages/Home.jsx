@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { LEVELS } from "../engine/stockfishEngine.js";
+import PttButton from "../components/PttButton.jsx";
 import { createGame } from "../game/logic.js";
 import { saveGame, saveSeat, listGames } from "../storage/localStore.js";
 
@@ -82,6 +83,10 @@ export default function Home() {
           </form>
         </section>
       </div>
+
+      <section className="panel" style={{ marginTop: 20 }}>
+        <PttButton />
+      </section>
 
       {recent.length > 0 && (
         <section className="panel recent">

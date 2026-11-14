@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { createVoiceSession } from "../voice/webrtcPtt.js";
+import { isSanketPttConnected } from "../voice/ptt.js";
 
 export function useVoice({ getPeer, getRemotePeerId, sendTalking, enabled: wantEnabled, color }) {
   const voiceRef = useRef(null);
@@ -41,6 +42,7 @@ export function useVoice({ getPeer, getRemotePeerId, sendTalking, enabled: wantE
       if (e.repeat) return;
       const tag = e.target?.tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || e.target?.isContentEditable) return;
+      if (isSanketPttConnected()) return; // Sanket PTT owns Space while connected
       e.preventDefault();
       if (!voiceRef.current?.isEnabled()) return;
       setPtt(true);

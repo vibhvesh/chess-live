@@ -10,6 +10,7 @@ import CapturedPieces from "../components/CapturedPieces.jsx";
 import ConnectionStatus from "../components/ConnectionStatus.jsx";
 import GameControls from "../components/GameControls.jsx";
 import GameOver, { resultText } from "../components/GameOver.jsx";
+import PttButton from "../components/PttButton.jsx";
 
 export default function ComputerGame() {
   const { gameId } = useParams();
@@ -126,6 +127,7 @@ export default function ComputerGame() {
               onReview={goReview}
             />
           </div>
+          <PttButton />
         </aside>
       </div>
     </div>

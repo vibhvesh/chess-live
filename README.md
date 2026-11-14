@@ -20,15 +20,11 @@ GitHub Pages is static, so there is no socket server. The host (White) opens a P
 
 If a NAT blocks a direct connection, a move or voice session may fail; you can later point PeerJS at your own broker with `VITE_PEERJS_HOST`.
 
-## Sanket PTT adapter
+## Sanket PTT (web)
 
-Voice is in-game WebRTC by default. To route talk through the Sanket PTT backend later:
+A **PTT** button on the home, live-game, and vs-computer pages talks on the Sanket radio network over public MQTT/WSS (same protocol as SuperPTT). Default channel is `chess` (editable, `a-z0-9_-`, 1–40 chars). Hold the PTT button or Space (when not typing). In-game WebRTC voice between the two chess players is unchanged.
 
-1. Set `VITE_PTT_URL` (default `https://ptt.bowlinger.net`) — see `.env.example`.
-2. Implement `connectPtt()` in [`voice/pttAdapter.js`](voice/pttAdapter.js).
-3. Switch `client/src/hooks/useVoice.js` to that adapter.
-
-The stub is documented in [`voice/README.md`](voice/README.md).
+The official client is loaded from `https://vibhvesh.github.io/sanketptt/superptt/superptt.js` (`window.SuperPTT`), with a vendored fallback. See [`voice/pttAdapter.js`](voice/pttAdapter.js) and [`client/src/voice/ptt.js`](client/src/voice/ptt.js).
 
 ## Project layout
 

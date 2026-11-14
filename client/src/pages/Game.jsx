@@ -12,6 +12,7 @@ import CapturedPieces from "../components/CapturedPieces.jsx";
 import ConnectionStatus from "../components/ConnectionStatus.jsx";
 import GameControls from "../components/GameControls.jsx";
 import VoiceChat from "../components/VoiceChat.jsx";
+import PttButton from "../components/PttButton.jsx";
 import GameOver, { resultText } from "../components/GameOver.jsx";
 
 export default function Game() {
@@ -127,6 +128,7 @@ export default function Game() {
               onReview={goReview}
             />
           </div>
+          <PttButton />
           {role !== "spectator" && (
             <VoiceChat
               enabled={voice.enabled}

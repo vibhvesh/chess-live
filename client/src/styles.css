@@ -177,3 +177,12 @@ button.ptt.hot { background: var(--danger); border-color: #e07068; color: white;
   .page { padding: 12px 10px 40px; }
   .hero h1 { font-size: 2.2rem; }
 }
+
+.ptt-panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+.ptt-head { font-weight: 600; margin-bottom: 4px; }
+.ptt-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+.ptt-status { font-size: 0.9rem; color: var(--muted); margin: 4px 0; }
+.ptt-online { font-size: 0.9rem; margin-bottom: 8px; word-break: break-word; }
+.ptt-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.ptt-actions .ptt { flex: 1; min-width: 120px; }
+@media (max-width: 600px) { .ptt-fields { grid-template-columns: 1fr; } }
